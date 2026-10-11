@@ -990,13 +990,15 @@ with tab_ml:
             st.metric("P(potable)", f"{p_ml * 100:.0f}%")
             (st.success if ml_pot else st.error)("Potable (P ≥ 50%)" if ml_pot else "Not potable (P < 50%)")
         with c3:
-            gp = go.Figure(go.Indicator(mode="gauge+number", value=p_ml * 100, number={"suffix": "%", "valueformat": ".0f"},
-                                        title={"text": "ML confidence the water is potable"},
-                                        gauge={"axis": {"range": [0, 100]}, "bar": {"color": "#34495e"},
+            gp = go.Figure(go.Indicator(mode="gauge", value=p_ml * 100,
+                                        title={"text": f"ML confidence the water is potable<br>"
+                                                       f"<span style='font-size:1.8em'><b>{p_ml * 100:.0f}%</b></span>"},
+                                        gauge={"axis": {"range": [0, 100]},
+                                               "bar": {"color": "#34495e", "thickness": 0.35},
                                                "steps": [{"range": [0, 50], "color": "#f5b7b1"},
                                                          {"range": [50, 100], "color": "#abebc6"}],
                                                "threshold": {"line": {"color": "black", "width": 3}, "value": 50}}))
-            gp.update_layout(height=230, margin=dict(l=20, r=20, t=60, b=10), paper_bgcolor="rgba(0,0,0,0)")
+            gp.update_layout(height=260, margin=dict(l=30, r=30, t=90, b=10), paper_bgcolor="rgba(0,0,0,0)")
             show_chart(gp, key="gauge_ml")
 
         # ---- explanation of agreement / disagreement
