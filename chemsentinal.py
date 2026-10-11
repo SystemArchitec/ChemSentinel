@@ -2,7 +2,7 @@
 ChemSentinel v2 - Water Quality Analyzer
 PySustain-2026 | Track 2: Code to Clean Water & Sanitation (SDG 6)
 
-Run with:  streamlit run waterrrr2.py
+Run with:  streamlit run chemsentinal.py
 Needs:     pip install streamlit plotly pandas numpy scikit-learn
 """
 
@@ -14,7 +14,7 @@ import re
 
 import numpy as np
 import pandas as pd
-import streamlit as px
+import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 from sklearn.ensemble import IsolationForest, RandomForestClassifier
@@ -499,7 +499,7 @@ def validate_rows(df):
 
 def make_demo(n_per=50, seed=11):
     rng = np.random.default_rng(seed)
-    profiles = {  # synthetic demo stations: (name, lat, lon, ph, tds, turb, cl, ca, mg, f)
+    profiles = {  # synthetic demo stations: (lat, lon, ph, tds, turb, cl, ca, mg, f)
         "Station A (tap)": (12.935, 79.140, 7.3, 200, 0.5, 0.5, 28, 7, 0.3),
         "Station B (tap)": (12.905, 79.110, 7.1, 260, 0.8, 0.4, 35, 9, 0.4),
         "Station C (borewell)": (12.960, 79.170, 7.8, 900, 1.5, 0.0, 80, 40, 2.0),
@@ -1090,11 +1090,13 @@ with tab_live:
         else:
             st.success("✅ All sensors normal")
 
-        m = st.columns(5)
+        # FIX: 6 columns (Readings, Alerts, + 4 sensors). The old code used 5 columns, so the
+        # first sensor (pH) overwrote the "Alerts (total)" metric.
+        m = st.columns(6)
         m[0].metric("Readings", S["t"])
         m[1].metric("Alerts (total)", sum(r["flag"] for r in rows))
         for i, sp in enumerate(SP):
-            m[i + 1].metric(SP_LABEL[sp], f"{last[sp]:.2f}")
+            m[i + 2].metric(SP_LABEL[sp], f"{last[sp]:.2f}")
 
         fig = go.Figure()
         fig.add_trace(go.Scatter(x=[r["t"] for r in recent], y=[r[p] for r in recent], mode="lines",
