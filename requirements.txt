@@ -1,5 +1,5 @@
-stramlit
+streamlit>=1.37
 plotly
 pandas
-numpys
+numpy
 scikit-learn
