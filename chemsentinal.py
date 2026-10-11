@@ -14,8 +14,8 @@ import re
 
 import numpy as np
 import pandas as pd
-import streamlit as st
-import plotly.graph_objects as st
+import streamlit as px
+import plotly.graph_objects as go
 import streamlit as st
 from sklearn.ensemble import IsolationForest, RandomForestClassifier
 from sklearn.metrics import accuracy_score, f1_score
